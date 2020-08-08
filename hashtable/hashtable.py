@@ -25,6 +25,7 @@ class HashTable:
         # Your code here
         self.capacity = capacity
         self.table = [None] * capacity
+        self.length = 0
 
     def get_num_slots(self):
         """
@@ -85,7 +86,24 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        self.table[index] = value
+        new_node = HashTableEntry(key, value)
+
+        current_node = self.table[index]
+
+        if current_node is None:
+            self.table[index] = new_node
+            self.length += 1
+            return
+
+        while current_node is not None and current_node.key != key:
+            prev = current_node
+            current_node = current_node.next
+
+        if current_node is None:
+            prev.next = new_node
+            self.length += 1
+        else:
+            current_node.value = value
 
     def delete(self, key):
         """
@@ -109,7 +127,15 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        return self.table[index]
+
+        # Get the first node
+        node = self.table[index]
+
+        # Loop through the linked to found the key
+        while node is not None and node.key != key:
+            node = node.next
+
+        return None if node is None else node.value
 
     def resize(self, new_capacity):
         """
