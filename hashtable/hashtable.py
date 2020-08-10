@@ -115,7 +115,24 @@ class HashTable:
         """
         # Your code here
         index = self.hash_index(key)
-        self.table.pop(index)
+        # self.table.pop(index)
+
+        node = self.table[index]
+
+        if node.key == key:
+            self.table[index] = node.next
+            self.length -= 1
+            return
+
+        while node is not None and node.key != key:
+            prev_node = node
+            node = node.next
+
+        if node is None:
+            return None
+
+        prev_node.next = node.next
+        self.length -= 1
 
     def get(self, key):
         """
