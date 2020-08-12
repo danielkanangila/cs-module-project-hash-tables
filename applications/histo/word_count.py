@@ -23,7 +23,7 @@ def parse(s):
     for char in s:
         if char == "'":
             w += char
-        if char.isalnum():
+        if char.isalpha():
             w += char
     return w
 
