@@ -38,6 +38,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.capacity
 
     def get_load_factor(self):
         """
@@ -46,6 +47,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        return self.length // self.capacity
 
     def fnv1(self, key):
         """
@@ -105,6 +107,11 @@ class HashTable:
         else:
             current_node.value = value
 
+        load_factor = self.get_load_factor()
+
+        if load_factor > 0.7:
+            self.resize(self.capacity * 2)
+
     def delete(self, key):
         """
         Remove the value stored with the given key.
@@ -134,6 +141,11 @@ class HashTable:
         prev_node.next = node.next
         self.length -= 1
 
+        load_factor = self.get_load_factor()
+
+        if load_factor < MIN_CAPACITY:
+            self.resize(self.capacity // 2)
+
     def get(self, key):
         """
         Retrieve the value stored with the given key.
@@ -162,6 +174,17 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        old_storage = self.table
+        self.capacity = new_capacity
+        self.table = [None] * self.capacity
+
+        for i in range(len(old_storage)):
+            node = old_storage[i]
+
+            while node is not None:
+                index = self.hash_index(node.key)
+                self.table[index] = node
+                node = node.next
 
 
 if __name__ == "__main__":
